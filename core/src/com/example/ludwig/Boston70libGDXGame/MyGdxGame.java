@@ -5,30 +5,38 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class MyGdxGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private BitmapFont font;
     private Texture img;
+    private TextureAtlas ninjaAtlas;
+    private Animation animation;
+    private float timePassed = 0;
     private Sprite sprite;
+
 
 
 	
 	@Override
 	public void create () {
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.BLUE);
-        font.scale(5);
+        ninjaAtlas = new TextureAtlas(Gdx.files.internal("ninja.atlas"));
+        animation = new Animation(1/10f, ninjaAtlas.getRegions());
+
 	}
 
     @Override
     public void dispose() {
         batch.dispose();
-        font.dispose();
+       ninjaAtlas.dispose();
+
+
     }
 
     @Override
@@ -38,8 +46,8 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        font.draw(batch, "Hey this is almost a game now, right?!", 100, 400);
-
+        timePassed += Gdx.graphics.getDeltaTime();
+        batch.draw(animation.getKeyFrame(timePassed, true), 100, 300);
         batch.end();
 
 
